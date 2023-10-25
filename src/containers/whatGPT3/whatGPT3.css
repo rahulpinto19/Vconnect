@@ -70,6 +70,10 @@
 
     margin-top: 2rem;
 }
+.gpt3__workshop img {
+    width: 60%;
+    height: 60%;
+}
 
 /* Customizing feature component as per needs */
 .gpt3__whatgpt3-container .gpt3__features-container__feature {

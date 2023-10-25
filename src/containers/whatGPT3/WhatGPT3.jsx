@@ -1,5 +1,7 @@
 import React from 'react';
+import workshop from '../../assets/workshop.png';
 import Feature from '../../components/feature/Feature';
+
 import './whatGPT3.css';
 
 const WhatGPT3 = () => (
@@ -8,8 +10,10 @@ const WhatGPT3 = () => (
       <Feature title="Get latest updates and be connected with world" text="Here,we will help to the students and get them ready for joining the corporate world ." />
     </div>
     <div className="gpt3__whatgpt3-heading">
-      <h1 className="gradient__text">The possibilities are beyond your imagination</h1>
-      <p>Explore the platform</p>
+      <h1 className="gradient__text">The possibilities are beyond your imagination. We connect you with some of the industry experts and get you industry ready.</h1>
+      <div className="gpt3__workshop">     
+      <img src={workshop} alt="possibility" />
+      </div>
     </div>
     <div className="gpt3__whatgpt3-container">
       <Feature title="Hackathon" text="Participate in the contest and get ready for embracing your coding skills.We are going to share hackathone which will be held in Cuh as well as Hackathons organised by some recognized platforms." />
