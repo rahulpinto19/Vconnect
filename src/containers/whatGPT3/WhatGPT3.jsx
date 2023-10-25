@@ -3,9 +3,9 @@ import Feature from '../../components/feature/Feature';
 import './whatGPT3.css';
 
 const WhatGPT3 = () => (
-  <div className="gpt3__whatgpt3 section__margin" id="wgpt3">
+  <div className="gpt3__whatgpt3 section__margin" id="workshop">
     <div className="gpt3__whatgpt3-feature">
-      <Feature title="Get latest updates and be connected with world" text="Here,we will mentor to the cuh students and get them ready for joining the corporate world ." />
+      <Feature title="Get latest updates and be connected with world" text="Here,we will help to the students and get them ready for joining the corporate world ." />
     </div>
     <div className="gpt3__whatgpt3-heading">
       <h1 className="gradient__text">The possibilities are beyond your imagination</h1>
