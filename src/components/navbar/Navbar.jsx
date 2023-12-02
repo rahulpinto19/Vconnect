@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { RiCloseLine, RiMenu3Line } from 'react-icons/ri';
 import logo from '../../assets/new-logo.svg';
 import './navbar.css';
+import Signin from '../Signin';
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
-
+  const onClick =()=>
+  {
+    console.log("onclicked");
+    <Signin/>
+  }
   return (
     <div className="gpt3__navbar">
       <div className="gpt3__navbar-links">
@@ -20,8 +25,8 @@ const Navbar = () => {
         </div>
       </div>
       <div className="gpt3__navbar-sign">
-        <p>Sign in</p>
-        <button type="button">Sign up</button>
+        
+        <button type="button" onClick={onClick}>Sign in</button>
       </div>
       <div className="gpt3__navbar-menu">
         {toggleMenu
@@ -36,7 +41,7 @@ const Navbar = () => {
             <p><a href="#features">Job Opportunity</a></p>
             
           </div>
-          <div className="gpt3__navbar-menu_container-links-sign">
+          <div className="gpt3__navbar-menu_container-links-sign m">
             <p>Sign in</p>
             <button type="button">Sign up</button>
           </div>
