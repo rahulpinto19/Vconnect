@@ -1,6 +1,6 @@
 import React from "react";
 
-const Otp = () => {
+const Otp = (props) => {
   return (
     <div>
       <div class="h-screen bg-blue-500 py-20 px-3 ">
@@ -11,7 +11,7 @@ const Otp = () => {
                 <h1 class="text-2xl font-bold">OTP Verification</h1>
                 <div class="flex flex-col mt-4">
                   <span>Enter the OTP you received at</span>
-                  <span class="font-bold">+91 ******876</span>
+                  <span class="font-bold">{props.data}</span>
                 </div>
 
                 <div

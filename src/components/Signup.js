@@ -1,15 +1,37 @@
 import React from "react";
 import { useState } from "react";
 import Otp from "./Otp";
+import axios from "axios";
 const Signup = () => {
-    const [otpcomponent,setOtpcomponent]=useState(false);
-    const onClick=()=>
+  const [credentials, setCredentials] = useState({
+    name: "",
+    email: "",
+    otp: "",
+    password: "",
+  });
+  const [otpcomponent, setOtpcomponent] = useState(false);
+  const onChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+  const onClickOtp = async(e) => {
+    e.preventDefault();
+    const { name, email } = credentials;
+    console.log({ name: name ,email:email});
+
+    setOtpcomponent(true);
+    const response = axios.post('http://localhost:8080/sendotpregk',{name:name,email:email}).then((res)=>
     {
-        setOtpcomponent(true);   
-        setTimeout(function() {
-            setOtpcomponent(false);
-          }, 5000);
-    }
+      console.log(response.data);
+    })
+    .catch((err)=>
+    {
+      console.log(err);
+    })
+   
+    setTimeout(function () {
+      setOtpcomponent(false);
+    }, 10000);
+  };
   return (
     <div>
       <div className="login-image"></div>
@@ -40,6 +62,8 @@ const Signup = () => {
                       type="name"
                       name="name"
                       id="name"
+                      
+                      onChange={onChange}
                       class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="xyz"
                       required=""
@@ -57,13 +81,20 @@ const Signup = () => {
                       type="email"
                       name="email"
                       id="email"
+                      onChange={onChange}
                       class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="name@company.com"
                       required=""
                     />
                   </div>
                   <div>
-                        <button className="text-black" id="otpButton" onClick={onClick}>send otp {otpcomponent && <Otp />}</button>
+                    <button
+                      className="text-black"
+                      id="otpButton"
+                      onClick={onClickOtp}
+                    >
+                      send otp {otpcomponent && <Otp data={credentials.email}/>}
+                    </button>
                   </div>
                   <div>
                     <label
@@ -76,6 +107,7 @@ const Signup = () => {
                       type="password"
                       name="password"
                       id="password"
+                      onChange={onChange}
                       placeholder="••••••••"
                       class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       required=""
@@ -90,7 +122,7 @@ const Signup = () => {
                       confirm password
                     </label>
                     <input
-                      type="cpassword"
+                      type="password"
                       name="cpassword"
                       id="cpassword"
                       placeholder="••••••••"
