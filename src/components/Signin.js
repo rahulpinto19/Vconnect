@@ -25,7 +25,10 @@ const Signin = () => {
       if (response.status === 200) 
       {
         console.log("login successful");
-        navigate('/')
+        
+        localStorage.setItem('token', response.data.authtoken); 
+        
+        navigate('/');
       }
       else
       {

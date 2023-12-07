@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+
 const user = require("../models/user.js");
 const userverification = require("../models/userVerification.js");
 const otpGenerator = require("otp-generator");
@@ -8,6 +11,7 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+const JWT_SECRET = "secretekey";
 //send otp for registration
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -47,7 +51,7 @@ router.post("/sendotpreg", async (req, res) => {
               console.log(error);
               res.send({ code: 400, message: "OTP not sended" });
             } else {
-              res.send({ code: 200, message: "OTP sent" });
+              res.send({ code: 200, message: "OTP sent", otp: otp });
             }
           });
         })
@@ -80,7 +84,7 @@ router.post("/sendotpreg", async (req, res) => {
               console.log(error);
               res.send({ code: 400, message: "OTP not sended" });
             } else {
-              res.send({ code: 200, message: "OTP sent" });
+              res.send({ code: 200, message: "OTP sent", otp: otp });
             }
           });
         })
@@ -95,17 +99,23 @@ router.post("/signup", async (req, res) => {
   const { name, email, otp, password } = await req.body;
   const Userverification = await userverification.findOne({ email });
 
-
   if (Userverification) {
+    const salt = await bcrypt.genSalt(10);
+    const secPass = await bcrypt.hash(password, salt);
     if (Userverification.otp === otp) {
       const newUser = new user({
         name: name,
         email: email,
         otp: otp,
-        password: password,
+        password: secPass,
       });
+      const data = {
+        email: email,
+        password: password,
+      };
+      const authtoken = jwt.sign(data, JWT_SECRET);
       newUser.save().then(() => {
-        res.send({ code: 200, message: "signup done" });
+        res.send({ code: 200, message: "signup done", authtoken: authtoken });
       });
     } else {
       res.send({ code: 401, message: "enter the correct otp" });
@@ -114,32 +124,39 @@ router.post("/signup", async (req, res) => {
     res.send({ code: 504, message: "otp expired" });
   }
 });
-router.post("/Login",async(req,res)=>
-{
-    const {email,password} = req.body;
-    //email and password has been received from the front end;
-    try
-    {
-      const userExist = await user.findOne({ email: email });
-      if(userExist)
-      {
-        if(password===userExist.password)
-        {
-            res.status(200).send({message:"login successfull",password:userExist.password});
-        }
-        else
-        {
-          res.status(201).send({message:"enter wrong password"});
-        }
+router.post("/Login", async (req, res) => {
+  const { email, password } = req.body;
+  //email and password has been received from the front end;
+  try {
+    const userExist = await user.findOne({ email: email });
+    if (userExist) {
+      const Compare = await bcrypt.compare(
+        req.body.password,
+        userExist.password
+      );
+      const data = {
+        email: email,
+        password: password,
+      };
+     
+      if (Compare) {
+        const authtoken = jwt.sign(data, JWT_SECRET);
+        res
+          .status(200)
+          .send({
+            message: "login successfull",
+            password: userExist.password,
+            authtoken: authtoken,
+          });
+      } else {
+        res.status(201).send({ message: "enter wrong password" });
       }
-      else
-      {
-        res.status(401).send({message:"invalid credentials"});
-      }
+    } else {
+      res.status(401).send({ message: "invalid credentials" });
     }
-    catch(err)
-    {
-      res.status(404).send({message:"internal server issue"});
-    }
-})
+  } catch (err) {
+    console.log(err);
+    res.status(404).send({ message: "internal server issue" });
+  }
+});
 module.exports = router;

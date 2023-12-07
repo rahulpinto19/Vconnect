@@ -21,6 +21,7 @@ const Signup = () => {
       .post("http://localhost:8080/signup", { name, email, otp, password })
       .then((res) => {
         console.log("successfully registered");
+      localStorage.setItem('token', response.authtoken);
         console.log(response.data);
       })
       .catch((err) => {

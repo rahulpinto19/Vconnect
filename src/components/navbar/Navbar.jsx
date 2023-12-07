@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { RiCloseLine, RiMenu3Line } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/new-logo.svg";
 import "./navbar.css";
 import Signin from "../Signin";
 import { BrowserRouter, Link } from "react-router-dom";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  let navigate = useNavigate();
   const onClick = () => {
     console.log("onclicked");
     // <Signin />;
   };
+  const handleLogout = (e)=>
+  {
+    localStorage.removeItem('token');
+    console.log("pressed on logout");
+    window.location.reload(true)
+    navigate('/')
+  }
   return (
     
       <div className="gpt3__navbar">
@@ -36,10 +45,12 @@ const Navbar = () => {
         
     
           <div className="gpt3__navbar-sign">
- 
-              <Link to='/Login' className="btn btn-primary">
+              {console.log(localStorage.getItem('token'))}
+              {
+              (!localStorage.getItem('token')) ? <Link to='/Login' className="btn btn-primary">
                 Sign in
-              </Link>
+              </Link> : <Link to ='/' className="btn btn-primary" onSubmit={handleLogout}>Logout</Link>
+              }
             
           </div>
     
@@ -85,5 +96,4 @@ const Navbar = () => {
 
   );
 };
-
 export default Navbar;
