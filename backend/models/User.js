@@ -20,7 +20,6 @@ const userschema = new mongoose.Schema
     date:
     {
         type:Date,
-        expires:3000,
         default:Date.now
     }
 
