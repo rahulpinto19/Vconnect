@@ -29,7 +29,7 @@ const Signin = () => {
       }
       else
       {
-        console.log("incorrect password");
+        console.log("incorrct password");
       }
     } catch (err) {
       console.log("internal server issue");
