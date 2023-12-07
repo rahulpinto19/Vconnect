@@ -7,6 +7,7 @@ import Signin from "../Signin";
 import { BrowserRouter, Link } from "react-router-dom";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  console.log("updated");
   let navigate = useNavigate();
   const onClick = () => {
     console.log("onclicked");
