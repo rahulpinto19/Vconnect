@@ -43,8 +43,8 @@ router.post("/sendotpreg", async (req, res) => {
           var mailOptions = {
             from: "rahulyadav252424@.com",
             to: email,
-            subject: "from rahul to vinay",
-            text: `this is your otp: ${otp}`,
+            subject: "Vconnect otp",
+            text: `Thank you for connecting with Vconnect Mr/Mrs ${name},your otp is ${otp}`,
           };
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -76,8 +76,8 @@ router.post("/sendotpreg", async (req, res) => {
           var mailOptions = {
             from: "rahulyadav252424@.com",
             to: email,
-            subject: "from rahul to vinay",
-            text: `this is your otp: ${otp}`,
+            subject: "Vconnect otp",
+            text: `Thank you for connecting with Vconnect Mr/Mrs ${name},your otp is ${otp}`,
           };
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) {

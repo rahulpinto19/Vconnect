@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
+import usercontext from "./usercontext";
 const Signin = () => {
+  // const [user,setUser] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -11,7 +14,7 @@ const Signin = () => {
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
-  const onSubmit = async(e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = credentials;
 
@@ -21,17 +24,13 @@ const Signin = () => {
         email,
         password,
       });
-      
-      if (response.status === 200) 
-      {
+
+      if (response.status === 200) {
         console.log("login successful");
-        
-        localStorage.setItem('token', response.data.authtoken); 
-        
-        navigate('/');
-      }
-      else
-      {
+
+        localStorage.setItem("token", response.data.authtoken);
+        navigate("/");
+      } else {
         console.log("incorrct password");
       }
     } catch (err) {
@@ -40,13 +39,6 @@ const Signin = () => {
   };
   return (
     <div>
-      <div className="login-image"></div>
-      <img
-        src="E:\react\project\images\sampleImage2.jpeg"
-        alt="Image"
-        class="w-64 h-64"
-      />
-
       <div>
         <section class="absolute top-20 right-0 ">
           <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

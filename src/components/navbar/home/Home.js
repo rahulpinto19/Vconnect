@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <>
       <Header />
-      <WhatGPT3 />
+      {/* <WhatGPT3 /> */}
       <Features />
       <Possibility />
       <CTA />
