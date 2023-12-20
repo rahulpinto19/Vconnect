@@ -5,8 +5,11 @@ const CTA = () => {
   let navigate = useNavigate();
   return (
     <div>
-      <div className="gpt3__cta">
+      {
+        !localStorage.getItem('token') &&
+        <div className="gpt3__cta">
         <div className="gpt3__cta-content">
+
           <p>Request Early Access to Get Started</p>
           <h3>Register Today & start exploring the endless possibilities.</h3>
         </div>
@@ -21,7 +24,7 @@ const CTA = () => {
             Get Started
           </button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

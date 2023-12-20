@@ -28,5 +28,5 @@ const updateschema = new mongoose.Schema
         default:Date.now
     }
 }) 
-const updates = mongoose.model("mainposts",updateschema);
-module.exports = updates;
+const queuedPosts = mongoose.model("updates",updateschema);
+module.exports = queuedPosts;

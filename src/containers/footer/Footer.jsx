@@ -12,7 +12,7 @@ const Footer = () => {
     <div>
       <div>
         <div className="gpt3__footer section__padding">
-          <div className="gpt3__footer-heading">
+          {localStorage.getItem('token')  && <div className="gpt3__footer-heading">
             <h1 className="gradient__text">üpdate a</h1>
             <h1 className="gradient__text">
               <Typed
@@ -21,13 +21,12 @@ const Footer = () => {
                 backSpeed={100}
                 loop
               >
-                {/* <input type="text"/> */}
               </Typed>
             </h1>
-          </div>
+          </div>}
 
           {
-            <div className="gpt3__footer-btn">
+            localStorage.getItem('token')  && <div className="gpt3__footer-btn">
               <Link to="/PostUpdates">
                 <p>Update</p>
               </Link>

@@ -21,7 +21,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-router.post("/sendotpreg", async (req, res) => {
+router.post("/sendotpreg", async (req, res) => 
+{
   const { name, email } = req.body;
   const userExist = await user.findOne({ email: email });
   if (userExist) {
@@ -138,16 +139,14 @@ router.post("/Login", async (req, res) => {
         email: email,
         password: password,
       };
-     
+
       if (Compare) {
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res
-          .status(200)
-          .send({
-            message: "login successfull",
-            password: userExist.password,
-            authtoken: authtoken,
-          });
+        res.status(200).send({
+          message: "login successfull",
+          password: userExist.password,
+          authtoken: authtoken,
+        });
       } else {
         res.status(201).send({ message: "enter wrong password" });
       }

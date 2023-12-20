@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useContext } from "react";
-import usercontext from "./usercontext";
+import loginimage from "../assets/undraw_mobile_content_xvgr.png";
 const Signin = () => {
-  // const [user,setUser] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -27,7 +25,6 @@ const Signin = () => {
 
       if (response.status === 200) {
         console.log("login successful");
-
         localStorage.setItem("token", response.data.authtoken);
         navigate("/");
       } else {
@@ -39,8 +36,22 @@ const Signin = () => {
   };
   return (
     <div>
-      <div>
+      <div className="mx-3 w-1/2 p-4">
+        <h1 className="gradient__text text-6xl font-bold my-1">
+          Learn today,
+        </h1>
+        <h1 className="gradient__text text-6xl font-bold my-1">
+          Lead tommorow
+        </h1>
+        <p className=" text-2xl text-white text-justify relative pt-4">
+          Stay informed, students! Get updates on jobs, hackathons, and events.
+          Sign in for the latest opportunities and exciting happenings in your
+          academic journey
+        </p>
+      </div>
+      <div className="w-1/2 p-4">
         <section class="absolute top-20 right-0 ">
+          <div></div>
           <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div class="p-6 space-y-4 md:space-y-6 sm:p-8">

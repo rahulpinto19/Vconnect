@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Otp from "./Otp";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const Signup = () => {
   const [otpcomponent, setOtpcomponent] = useState(false);
@@ -11,6 +12,7 @@ const Signup = () => {
     otp: "",
     password: "",
   });
+  let navigate = useNavigate();
   const otpSentFromServer = "";
   const CreateuUser = (e) => {
     e.preventDefault();
@@ -21,12 +23,13 @@ const Signup = () => {
       .post("http://localhost:8080/signup", { name, email, otp, password })
       .then((res) => {
         console.log("successfully registered");
-      localStorage.setItem('token', response.authtoken);
+        localStorage.setItem("token", response.authtoken);
         console.log(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    navigate("/");
   };
   const handleOtpChange = (e) => {
     //the sent otp from the server  and user entered are same then go forward
@@ -47,9 +50,7 @@ const Signup = () => {
     setOtpcomponent(true);
     const response = axios
       .post("http://localhost:8080/sendotpreg", { name: name, email: email })
-      .then((res) => {
-        console.log(response.data);
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
@@ -58,13 +59,16 @@ const Signup = () => {
       setOtpcomponent(false);
     }, 60000);
   };
+  function isValidEmail(email) {
+    // Regular expression for basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
   return (
-    <div>
-      <div className="login-image"></div>
+    <div  >
       
-      {/* <h1 className="text-white top-20 right-0 ">Creating a new user</h1> */}
-      <div>
-        <section class="absolute top-40 right-20 left-20 ">
+      <div className="mt-[-1rem]">
+        <section class="absolute  right-20 left-20 ">
           <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
               <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -72,66 +76,72 @@ const Signup = () => {
                   create a New account
                 </h1>
                 <form class="space-y-4 md:space-y-6" onSubmit={CreateuUser}>
-                  {/* for name */}
-                  <div>
-                    <label
-                      for="name"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-                    >
-                      Enter your name
-                    </label>
-                    <input
-                      type="name"
-                      name="name"
-                      id="name"
-                      onChange={onChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="xyz"
-                      required="true"
-                    />
-                  </div>
-                  {/* for email */}
-                  <div>
-                    <label
-                      for="email"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-                    >
-                      Your email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      onChange={onChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="name@company.com"
-                      required=""
-                    />
-                  </div>
-                  <div>
-                    <button
-                      className="text-black"
-                      id="otpButton"
-                      onClick={onClickOtp}
-                    >
-                      send otp
+                  {
+                    <div>
+                      <div>
+                        <label
+                          for="name"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                        >
+                          Enter your name
+                        </label>
+                        <input
+                          type="name"
+                          name="name"
+                          disabled={otpcomponent}
+                          id="name"
+                          onChange={onChange}
+                          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="xyz"
+                          required="true"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="email"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                        >
+                          Your email
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          id="email"
+                          disabled={otpcomponent}
+                          onChange={onChange}
+                          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="name@company.com"
+                          required=""
+                        />
+                      </div>
+                    </div>
+                  }
+                  {isValidEmail(credentials.email) && credentials.name && (
+                    <div>
+                      <button
+                        className="text-black hover:bg-blue-100"
+                        id="otpButton"
+                        onClick={onClickOtp}
+                      >
+                        {!otpcomponent ? "send otp" : "otp sent "}
                       </button>
                       {otpcomponent && (
                         <input
-                          className="border-solid border-2 border-blue-500 ..."
+                          className="border-solid border-2 border-blue-500 ... "
                           type="text"
                           name="otp"
                           id="otp"
                           maxLength={6}
-                          onChange={(event) => 
-                          {
+                          placeholder="xxx-xxx"
+                          onChange={(event) => {
                             onChange(event);
                             handleOtpChange(event);
                           }}
                         />
                       )}
                       {/* send otp {otpcomponent && <Otp data={credentials.email}/>} */}
-                  </div>
+                    </div>
+                  )}
                   {validatedOtp && (
                     <div>
                       <div>

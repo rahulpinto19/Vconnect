@@ -1,12 +1,10 @@
 import React from "react";
 import { useState } from "react";
-//to be included in the fom
-// eventname
-// typeofevent
-// link
-// date
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import Alert from "./Alert";
 const PostUpdates = () => {
+  let navigate = useNavigate();
   let [credentials, setCredentials] = useState({
     eventname: "",
     typeofevent: "",
@@ -23,11 +21,36 @@ const PostUpdates = () => {
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
-  const onSubmit = (e) => {
+  const onSubmit = async(e) => {
     e.preventDefault();
     console.log(credentials);
     const {eventname,typeofevent,link,date} = credentials
-    // const user =  
+    // update userid later
+    const authorid =   "rahulyadav252424@gmail.com"
+    try{
+      const response = await axios.post("http://localhost:8080/data", {
+        authorid,
+        eventname,
+        typeofevent,
+        link,
+        date,
+      });
+      console.log(response)
+      if(response.status === 200)
+      {console.log("post updated successfully");
+      
+      // navigate("/");
+    }
+      else
+      {console.log("unable to upload post ,Internal server issue")}
+      
+
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+
   };
   return (
     <div>
