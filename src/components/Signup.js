@@ -1,39 +1,46 @@
 import React from "react";
 import { useState } from "react";
-import Otp from "./Otp";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const Signup = () => {
+  const OTP = 0;
   const [otpcomponent, setOtpcomponent] = useState(false);
   const [validatedOtp, setValidatedOtp] = useState(false);
   const [credentials, setCredentials] = useState({
-    name: "",
+    fname: "",
+    lname: "",
+    rollno: "",
     email: "",
     otp: "",
     password: "",
   });
   let navigate = useNavigate();
-  const otpSentFromServer = "";
   const CreateuUser = (e) => {
     e.preventDefault();
     console.log("form submitted");
-    const { name, email, otp, password } = credentials;
-    console.log({ name, email, otp, password });
+    const { fname, lname, rollno, email, otp, password } = credentials;
+    // console.log({ name, email, otp, password });
+    const Name = fname + " " + lname;
     const response = axios
-      .post("http://localhost:8080/signup", { name, email, otp, password })
+      .post("http://localhost:8080/signup", {
+        Name,
+        email,
+        rollno,
+        otp,
+        password,
+      })
       .then((res) => {
-        console.log("successfully registered");
+        alert(res.data.message);
         localStorage.setItem("token", response.authtoken);
-        console.log(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        alert("internal server issue");
       });
     navigate("/");
   };
   const handleOtpChange = (e) => {
     //the sent otp from the server  and user entered are same then go forward
-    if (e.target.value.length == 6) {
+    if (e.target.value.length === 6) {
       setValidatedOtp(true);
     } else {
       setValidatedOtp(false);
@@ -44,13 +51,17 @@ const Signup = () => {
   };
   const onClickOtp = async (e) => {
     e.preventDefault();
-    const { name, email } = credentials;
+    const { fname, lname, email } = credentials;
 
+    const Name = fname + " " + lname;
     console.log("onclickotp");
     setOtpcomponent(true);
     const response = axios
-      .post("http://localhost:8080/sendotpreg", { name: name, email: email })
-      .then((res) => {})
+      .post("http://localhost:8080/sendotpreg", { name: Name, email: email })
+      .then((res) => {
+        alert(res.data.message);
+        OTP = res.data.otp;
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -65,8 +76,7 @@ const Signup = () => {
     return emailRegex.test(email);
   }
   return (
-    <div  >
-      
+    <div>
       <div className="mt-[-1rem]">
         <section class="absolute  right-20 left-20 ">
           <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -78,18 +88,56 @@ const Signup = () => {
                 <form class="space-y-4 md:space-y-6" onSubmit={CreateuUser}>
                   {
                     <div>
+                      {/* for first name */}
                       <div>
                         <label
-                          for="name"
+                          for="fname"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
                         >
-                          Enter your name
+                          First Name
                         </label>
                         <input
                           type="name"
-                          name="name"
+                          name="fname"
                           disabled={otpcomponent}
-                          id="name"
+                          id="fname"
+                          onChange={onChange}
+                          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="First name"
+                          required="true"
+                        />
+                      </div>
+                      {/* for last name */}
+                      <div>
+                        <label
+                          for="lname"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                        >
+                          Last Name
+                        </label>
+                        <input
+                          type="name"
+                          name="lname"
+                          disabled={otpcomponent}
+                          id="lname"
+                          onChange={onChange}
+                          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="last name"
+                          required="true"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="rollno"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                        >
+                          Roll No
+                        </label>
+                        <input
+                          type="name"
+                          name="rollno"
+                          disabled={otpcomponent}
+                          id="rollno"
                           onChange={onChange}
                           class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="xyz"
@@ -111,38 +159,41 @@ const Signup = () => {
                           onChange={onChange}
                           class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="name@company.com"
-                          required=""
+                          required="true"
                         />
                       </div>
                     </div>
                   }
-                  {isValidEmail(credentials.email) && credentials.name && (
-                    <div>
-                      <button
-                        className="text-black hover:bg-blue-100"
-                        id="otpButton"
-                        onClick={onClickOtp}
-                      >
-                        {!otpcomponent ? "send otp" : "otp sent "}
-                      </button>
-                      {otpcomponent && (
-                        <input
-                          className="border-solid border-2 border-blue-500 ... "
-                          type="text"
-                          name="otp"
-                          id="otp"
-                          maxLength={6}
-                          placeholder="xxx-xxx"
-                          onChange={(event) => {
-                            onChange(event);
-                            handleOtpChange(event);
-                          }}
-                        />
-                      )}
-                      {/* send otp {otpcomponent && <Otp data={credentials.email}/>} */}
-                    </div>
-                  )}
-                  {validatedOtp && (
+                  {isValidEmail(credentials.email) &&
+                    credentials.rollno &&
+                    credentials.fname && (
+                      <div>
+                        <button
+                          className="text-black hover:bg-blue-100"
+                          id="otpButton"
+                          onClick={onClickOtp}
+                        >
+                          {!otpcomponent ? "send otp" : "Enter otp"}
+                        </button>
+                        {otpcomponent && (
+                          <input
+                            className="border-solid border-2 border-blue-500 ... "
+                            type="text"
+                            name="otp"
+                            id="otp"
+                            minLength={6}
+                            maxLength={6}
+                            placeholder="xxx-xxx"
+                            onChange={(event) => {
+                              onChange(event);
+                              handleOtpChange(event);
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                  {
+                    // validatedOtp &&
                     <div>
                       <div>
                         <label
@@ -162,22 +213,6 @@ const Signup = () => {
                         />
                       </div>
                       {/* confirmPassword */}
-                      <div>
-                        <label
-                          for="cpassword"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
-                        >
-                          confirm password
-                        </label>
-                        <input
-                          type="password"
-                          name="cpassword"
-                          id="cpassword"
-                          placeholder="••••••••"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          required=""
-                        />
-                      </div>
                       <div class="flex items-center justify-between"></div>
                       <button
                         type="submit"
@@ -186,7 +221,7 @@ const Signup = () => {
                         create
                       </button>
                     </div>
-                  )}
+                  }
                 </form>
               </div>
             </div>

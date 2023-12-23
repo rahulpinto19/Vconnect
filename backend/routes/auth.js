@@ -3,12 +3,12 @@ const app = express();
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
 const user = require("../models/user.js");
 const userverification = require("../models/userVerification.js");
 const otpGenerator = require("otp-generator");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
+const { getUserCollection } = require("../getcollection.js");
 app.use(cors());
 app.use(express.json());
 const JWT_SECRET = "secretekey";
@@ -21,8 +21,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-router.post("/sendotpreg", async (req, res) => 
-{
+router.post("/sendotpreg", async (req, res) => {
   const { name, email } = req.body;
   const userExist = await user.findOne({ email: email });
   if (userExist) {
@@ -97,15 +96,27 @@ router.post("/sendotpreg", async (req, res) =>
 });
 //router:2 signup
 router.post("/signup", async (req, res) => {
-  const { name, email, otp, password } = await req.body;
-  const Userverification = await userverification.findOne({ email });
+  const { Name, email, rollno, otp, password } = await req.body;
+  const Userverification = await userverification.findOne({ email: email });
 
   if (Userverification) {
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(password, salt);
-    if (Userverification.otp === otp) {
+    const year = new Date().getFullYear();
+    const actualData = await getUserCollection(year, email, rollno);
+    //if the data is not exist in the excel file
+    console.log(actualData, "whether the data is ther in excel");
+    console.log(Userverification.otp, "otp");
+    if (!actualData) {
+      console.log("contact admin");
+      return res.send({
+        message:
+          " check the credentials or Please contact Admin to create account ",
+      });
+    }
+    if (Userverification.otp === otp && actualData) {
       const newUser = new user({
-        name: name,
+        name: Name,
         email: email,
         otp: otp,
         password: secPass,
@@ -119,7 +130,11 @@ router.post("/signup", async (req, res) => {
         res.send({ code: 200, message: "signup done", authtoken: authtoken });
       });
     } else {
-      res.send({ code: 401, message: "enter the correct otp" });
+      res.send({
+        code: 401,
+        message:
+          "check the credentials or Please contact Admin to create account ",
+      });
     }
   } else {
     res.send({ code: 504, message: "otp expired" });

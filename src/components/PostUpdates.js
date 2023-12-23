@@ -37,9 +37,9 @@ const PostUpdates = () => {
       });
       console.log(response)
       if(response.status === 200)
-      {console.log("post updated successfully");
+      {alert("Post will be reviewed by Admin please wait for 48hrs");
       
-      // navigate("/");
+      navigate("/");
     }
       else
       {console.log("unable to upload post ,Internal server issue")}
