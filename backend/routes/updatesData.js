@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 app.use(express.json());
+const jwt = require("jsonwebtoken");
 const mainposts = require('../models/mainposts');
 const queuedPosts = require('../models/queudeposts');
 const cors = require("cors");
@@ -41,7 +42,7 @@ router.post("/data", async (req, res) => {
   await data
     .save()
     .then(() => {
-      res.status(200).send("data has been saved");
+      res.status(200).send({authorid});
     })
     .catch(() => {
       res.status(201).send({ message: "the data has not been saved" });

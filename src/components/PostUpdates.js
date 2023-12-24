@@ -25,8 +25,9 @@ const PostUpdates = () => {
     e.preventDefault();
     console.log(credentials);
     const {eventname,typeofevent,link,date} = credentials
-    // update userid later
-    const authorid =   "rahulyadav252424@gmail.com"
+    // update userid laterx
+    let authorid =   "";
+   
     try{
       const response = await axios.post("http://localhost:8080/data", {
         authorid,
