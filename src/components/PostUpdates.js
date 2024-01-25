@@ -26,7 +26,9 @@ const PostUpdates = () => {
     console.log(credentials);
     const {eventname,typeofevent,link,date} = credentials
     // update userid laterx
-    let authorid =   "";
+    const token = localStorage.getItem('token');
+    // const decodedT = jwt.decode(token);
+    let authorid =   token;
    
     try{
       const response = await axios.post("http://localhost:8080/data", {

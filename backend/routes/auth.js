@@ -98,7 +98,6 @@ router.post("/sendotpreg", async (req, res) => {
 router.post("/signup", async (req, res) => {
   const { Name, email, rollno, otp, password } = await req.body;
   const Userverification = await userverification.findOne({ email: email });
-
   if (Userverification) {
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(password, salt);
@@ -110,6 +109,7 @@ router.post("/signup", async (req, res) => {
     if (!actualData) {
       console.log("contact admin");
       return res.send({
+        code:201,
         message:
           " check the credentials or Please contact Admin to create account ",
       });

@@ -10,6 +10,9 @@ app.use(cors());
 //pushing post into queuedpost
 router.post("/data", async (req, res) => {
   var { authorid, eventname, typeofevent, link, date } = req.body;
+  const token = authorid;
+  const decodedPayload = jwt.decode(token);
+  const author = decodedPayload.email;
   if (eventname.length === 0) {
     //hackathon ,job ,workshop
     if (typeofevent === "hackathon") {
@@ -18,7 +21,7 @@ router.post("/data", async (req, res) => {
       eventname = stringArray[randomIndex];
     }
     if (typeofevent === "workshop") {
-      eventaname = typeofevent + "workshop";
+      eventname = typeofevent + "workshop";
     }
     if (typeofevent === "job") {
       const stringArray = [
@@ -33,7 +36,7 @@ router.post("/data", async (req, res) => {
   }
 
   var data = new queuedPosts({
-    authorid: authorid,
+    authorid: author,
     eventname: eventname,
     typeofevent: typeofevent,
     link: link,
