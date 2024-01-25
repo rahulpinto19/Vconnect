@@ -31,12 +31,14 @@ const Signup = () => {
       })
       .then((res) => {
         alert(res.data.message);
+        if (res.data.code === 200) {
+          navigate("/");
+        }
         localStorage.setItem("token", response.authtoken);
       })
       .catch((err) => {
         alert("internal server issue");
       });
-    navigate("/");
   };
   const handleOtpChange = (e) => {
     //the sent otp from the server  and user entered are same then go forward
